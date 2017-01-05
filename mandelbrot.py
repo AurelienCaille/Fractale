@@ -3,10 +3,10 @@ import sys
 import math
 from PyQt5.QtWidgets import  QWidget, QApplication
 from PyQt5.QtGui import QPainter, QColor, QPen
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer
 import numpy as np
 
-
+vitesse = 500
 
 class MandelbrotWidget(QWidget):
     def __init__(self, iteration, sizex= 1200, sizey = 800):
@@ -21,14 +21,13 @@ class MandelbrotWidget(QWidget):
         self.sizex = sizex
         self.sizey = sizey
 
-        self.initUI()
-        self.update()
-
-    def initUI(self):
-
         self.setGeometry(300, 300, self.sizex, self.sizey)
         self.setWindowTitle("Mandelbrot")
         self.show()
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.signal)
+        self.timer.start(vitesse)
+   
 
     def paintEvent(self, qp):
 
@@ -65,13 +64,20 @@ class MandelbrotWidget(QWidget):
                 except:
                     pass
 
+    def signal(self):
+
+        self.iteration += 1
+        self.update()
+        
+
 
 
 if __name__ == "__main__":
 
     print("Mandelbrot")
+    
     app = QApplication(sys.argv)
-    mandel = MandelbrotWidget(1000)
+    mandel = MandelbrotWidget(1, 1300, 800)
     sys.exit(app.exec_())
 
 
